@@ -1,15 +1,16 @@
 services:
 
-  mysql:
-    image: mysql:8.4
-    container_name: db
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: app_biblioteca
-      MYSQL_USER: dev
-      MYSQL_PASSWORD: minhasenha
+  app:
+    build: .
+
+    container_name: laravel_app
+
     ports:
-      - "3307:3306"
+      - "8000:8000"
+
+    working_dir: /app
+
+    command: bash -c "composer install && php artisan serve --host=0.0.0.0 --port=8000"
+
     volumes:
-      - ./init-db:/docker-entrypoint-initdb.d
+      - .:/app
