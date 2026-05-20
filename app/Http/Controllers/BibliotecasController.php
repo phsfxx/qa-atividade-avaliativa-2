@@ -59,14 +59,14 @@ class BibliotecasController extends Controller
 
         $users = \App\Models\User::all();
 
-        $biblioteca = Biblioteca::find($id);
+        $biblioteca = Biblioteca::where('id', $id)->first();
         if (!$biblioteca) {
             return redirect()->route('bibliotecas.index')->with('error', 'Biblioteca não encontrada');
         }
 
-        $pessoas = $biblioteca->pessoas;
+        // $pessoas = $biblioteca->pessoas;
 
-        return view('bibliotecas.edit', ['biblioteca' => $biblioteca, 'users' => $users, 'pessoas' => $pessoas]);
+        return view('bibliotecas.edit', ['biblioteca' => $biblioteca, 'users' => $users]);
     }
 
 
