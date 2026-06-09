@@ -11,6 +11,7 @@ class Autor extends Model
         'nome',
         'sobrenome',
         'nacionalidade',
+        'data_nascimento',
     ];
 
     protected $table = 'autores';

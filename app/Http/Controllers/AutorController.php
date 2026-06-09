@@ -21,13 +21,13 @@ class AutorController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'nome' => 'required|max:200',
             'nacionalidade' => 'nullable|max:100',
             'data_nascimento' => 'nullable|date',
         ]);
 
-        Autor::create($request->all());
+        Autor::create($data);
 
         return redirect()->route('autores.index')->with('success', 'Autor criado com sucesso.');
     }
@@ -40,14 +40,14 @@ class AutorController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $data = $request->validate([
             'nome' => 'required|max:200',
             'nacionalidade' => 'nullable|max:100',
             'data_nascimento' => 'nullable|date',
         ]);
 
         $autor = Autor::findOrFail($id);
-        $autor->update($request->all());
+        $autor->update($data);
 
         return redirect()->route('autores.index')->with('success', 'Autor atualizado com sucesso.');
     }

@@ -23,7 +23,7 @@ class PessoaControllerTest extends TestCase
         ]);
 
         $response->assertRedirect(route('pessoas.index'));
-        $this->assertDatabaseHas('pessoas', [ wdawwad 
+        $this->assertDatabaseHas('pessoas', [
             'name' => 'Joao Silva',
             'email' => 'joao@example.com',
             'telefone' => '11999999999',
