@@ -13,9 +13,8 @@ class AutorControllerTest extends TestCase
     public function test_index_displays_autores()
     {
         Autor::create([
-            'nome' => 'João',
+            'nome' => 'João Silva',
             'nacionalidade' => 'Brasileiro',
-            'data_nascimento' => '1980-10-10',
         ]);
 
         $response = $this->get(route('autores.index'));
@@ -36,25 +35,22 @@ class AutorControllerTest extends TestCase
     public function test_store_creates_autor()
     {
         $response = $this->post(route('autores.store'), [
-            'nome' => 'Maria',
+            'nome' => 'Maria Santos',
             'nacionalidade' => 'Portuguesa',
-            'data_nascimento' => '1990-05-20',
         ]);
 
         $response->assertRedirect(route('autores.index'));
         $this->assertDatabaseHas('autores', [
-            'nome' => 'Maria',
+            'nome' => 'Maria Santos',
             'nacionalidade' => 'Portuguesa',
-            'data_nascimento' => '1990-05-20',
         ]);
     }
 
     public function test_edit_displays_existing_autor()
     {
         $autor = Autor::create([
-            'nome' => 'Pedro',
+            'nome' => 'Pedro Costa',
             'nacionalidade' => 'Argentino',
-            'data_nascimento' => '1975-12-12',
         ]);
 
         $response = $this->get(route('autores.edit', $autor));
@@ -67,15 +63,13 @@ class AutorControllerTest extends TestCase
     public function test_update_changes_autor_data()
     {
         $autor = Autor::create([
-            'nome' => 'Roberto',
+            'nome' => 'Roberto Garcia',
             'nacionalidade' => 'Espanhol',
-            'data_nascimento' => '1965-03-03',
         ]);
 
         $response = $this->put(route('autores.update', $autor), [
             'nome' => 'Roberto Silva',
             'nacionalidade' => 'Espanhol',
-            'data_nascimento' => '1965-03-03',
         ]);
 
         $response->assertRedirect(route('autores.index'));

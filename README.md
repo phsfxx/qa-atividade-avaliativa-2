@@ -44,6 +44,10 @@ docker exec -it app_laravel bash
 XDEBUG_MODE=coverage /usr/bin/php8.4 artisan test --coverage
 ```
 
+```
+Teste para executar na máquina (pedro)
+docker exec -it app_laravel bash -c "XDEBUG_MODE=coverage /usr/local/bin/php artisan test --coverage"
+```
 
 
 

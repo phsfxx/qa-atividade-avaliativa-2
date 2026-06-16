@@ -53,4 +53,28 @@ class BibliotecaPessoaControllerTest extends TestCase
             'pessoa_id' => $pessoa->id,
         ]);
     }
+
+    public function test_store_returns_error_when_pessoa_already_associated()
+    {
+        $biblioteca = Biblioteca::create([
+            'created_by' => User::factory()->create()->id,
+            'nome' => 'Biblioteca Já Associada',
+            'endereco' => 'Rua Já Associada',
+            'telefone' => '777777777',
+            'email' => 'jaassociada@example.com',
+        ]);
+
+        $pessoa = Pessoa::factory()->create();
+
+        // Primeira associação
+        $biblioteca->pessoas()->attach($pessoa->id);
+
+        // Segunda tentativa deve retornar erro
+        $response = $this->post(route('bibliotecas.pessoas.store', ['biblioteca' => $biblioteca->id]), [
+            'pessoa_id' => $pessoa->id,
+        ]);
+
+        $response->assertRedirect(route('bibliotecas.pessoas.create', ['biblioteca' => $biblioteca->id]));
+        $response->assertSessionHas('error', 'Pessoa já está associada a esta biblioteca.');
+    }
 }

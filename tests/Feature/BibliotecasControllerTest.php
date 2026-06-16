@@ -101,4 +101,98 @@ class BibliotecasControllerTest extends TestCase
         $response->assertRedirect(route('bibliotecas.index'));
         $this->assertDatabaseMissing('bibliotecas', ['id' => $biblioteca->id]);
     }
+
+    public function test_edit_not_found_redirects_with_error()
+    {
+        $response = $this->get(route('bibliotecas.edit', 999));
+
+        $response->assertRedirect(route('bibliotecas.index'));
+        $response->assertSessionHas('error', 'Biblioteca não encontrada');
+    }
+
+    public function test_update_not_found_returns_error()
+    {
+        $response = $this->put(route('bibliotecas.update', 999), [
+            'nome' => 'Nonexistent',
+            'endereco' => 'Address',
+        ]);
+
+        $response->assertStatus(404);
+        $response->assertJson(['error' => 'Biblioteca não encontrada']);
+    }
+
+    public function test_destroy_not_found_returns_error()
+    {
+        $response = $this->delete(route('bibliotecas.destroy', 999));
+
+        $response->assertStatus(404);
+        $response->assertJson(['error' => 'Biblioteca não encontrada']);
+    }
+
+    public function test_update_with_partial_fields()
+    {
+        $biblioteca = Biblioteca::create([
+            'created_by' => User::factory()->create()->id,
+            'nome' => 'Biblioteca Parcial',
+            'endereco' => 'Rua Parcial',
+            'telefone' => '555555555',
+            'email' => 'parcial@example.com',
+        ]);
+
+        $response = $this->put(route('bibliotecas.update', $biblioteca->id), [
+            'nome' => 'Biblioteca Parcial Atualizada',
+        ]);
+
+        $response->assertRedirect(route('bibliotecas.index'));
+        $this->assertDatabaseHas('bibliotecas', [
+            'id' => $biblioteca->id,
+            'nome' => 'Biblioteca Parcial Atualizada',
+            'endereco' => 'Rua Parcial',
+        ]);
+    }
+
+    public function test_store_with_created_by()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->post(route('bibliotecas.store'), [
+            'created_by' => $user->id,
+            'nome' => 'Biblioteca com Created By',
+            'endereco' => 'Rua Nova',
+        ]);
+
+        $response->assertRedirect(route('bibliotecas.index'));
+        $this->assertDatabaseHas('bibliotecas', [
+            'created_by' => $user->id,
+            'nome' => 'Biblioteca com Created By',
+            'endereco' => 'Rua Nova',
+        ]);
+    }
+
+    public function test_update_with_all_fields()
+    {
+        $biblioteca = Biblioteca::create([
+            'created_by' => User::factory()->create()->id,
+            'nome' => 'Biblioteca Completa',
+            'endereco' => 'Rua Completa',
+        ]);
+
+        $newUser = User::factory()->create();
+
+        $response = $this->put(route('bibliotecas.update', $biblioteca->id), [
+            'created_by' => $newUser->id,
+            'nome' => 'Biblioteca Atualizada Completa',
+            'endereco' => 'Rua Atualizada Completa',
+            'email' => 'completa@example.com',
+        ]);
+
+        $response->assertRedirect(route('bibliotecas.index'));
+        $this->assertDatabaseHas('bibliotecas', [
+            'id' => $biblioteca->id,
+            'created_by' => $newUser->id,
+            'nome' => 'Biblioteca Atualizada Completa',
+            'endereco' => 'Rua Atualizada Completa',
+            'email' => 'completa@example.com',
+        ]);
+    }
 }
