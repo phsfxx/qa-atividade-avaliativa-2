@@ -47,6 +47,8 @@ XDEBUG_MODE=coverage /usr/bin/php8.4 artisan test --coverage
 ```
 Teste para executar na máquina (pedro)
 docker exec -it app_laravel bash -c "XDEBUG_MODE=coverage /usr/local/bin/php artisan test --coverage"
+<img width="1415" height="524" alt="image" src="https://github.com/user-attachments/assets/ddf42e6f-7dd7-4d3e-9177-305fac16ef68" />
+
 ```
 
 
